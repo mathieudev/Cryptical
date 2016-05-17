@@ -23,18 +23,18 @@ Unlocking mechanism :
 Generate RSA key pair if you need one :
 
 ```
-python cryptical --gen 4096
+python cryptical.py --gen 4096
 ```
 Lock your files in a secure container :
 
 ```
-python cryptical --lock file1.txt file2.txt --keys priv.pem pub.pem --output archive
+python cryptical.py --lock file1.txt file2.txt --keys priv.pem pub.pem --output archive
 ```
 
 Unlock your secure container :
 
 ```
-python cryptical --unlock archive.lkd --keys priv.pem pub.pem
+python cryptical.py --unlock archive.lkd --keys priv.pem pub.pem
 ```
 
 ## Authors
