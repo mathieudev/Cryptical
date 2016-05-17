@@ -39,7 +39,7 @@ python cryptical --unlock archive.lkd --keys priv.pem pub.pem
 
 ## Authors
 
-* **Hakan Kusne** - *Initial work* - [hakankusne](https://github.com/hakankusne)
+* **Hakan Küsne** - *Initial work* - [hakankusne](https://github.com/hakankusne)
 * **Mathieu Devaud** - *Initial work* - [mathieudev](https://github.com/mathieudev)
 
 
