@@ -16,7 +16,11 @@ Unlocking mechanism :
 
 ### Prerequisities
 
-[pycrypto](https://pypi.python.org/pypi/pycrypto)
+This tool works with Python 2.7 and the library [pycrypto](https://pypi.python.org/pypi/pycrypto).
+
+```
+pip install pycrypto
+```
 
 ### Examples
 
