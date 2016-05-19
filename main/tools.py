@@ -80,34 +80,6 @@ def tarfiles(files_list, outname):
     filename = outname
     tar = tarfile.open(filename, 'w')
     for name in files_list:
-        tar.add(name)
-    tar.close()
-    return tar.name
-
-
-# Takes list of files as argument, put them in tar archive and return it.
-def tarfiles_withoutpath(files_list, outname):
-    """Create a tar of input files.
-
-    This function create a tar of `files_list` named `outname`.
-
-    :parameter:
-     files_list : list
-        The id length in number of chars.
-     outname : string
-        The chars to use to create random id.
-
-    :raise ArgumentError:
-            If there is no files in `files_list`.
-
-    :return: A string, the name of the tar file
-    """
-
-    if len(files_list) < 1:
-        raise argparse.ArgumentError("You must give one or more filenames.")
-    filename = outname
-    tar = tarfile.open(filename, 'w')
-    for name in files_list:
         filename = path_leaf(name)
         tar.add(name, arcname=filename)
     tar.close()

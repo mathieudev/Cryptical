@@ -76,7 +76,7 @@ def lock_files(files_to_lock, rsa_private_key, rsa_public_key,
         #######################################################################
 
         # Put file in a tar archive
-        archive = tools.tarfiles_withoutpath(files_to_lock, 'source.tar')
+        archive = tools.tarfiles(files_to_lock, 'source.tar')
         archive_data = open(archive, mode='rb')
         raw = archive_data.read()
         archive_data.close()
