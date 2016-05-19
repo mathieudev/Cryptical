@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
             # if no name for output, use archive
             if args.output is not None:
-                output = str(args.output[0])
+                output = str(args.output)
             else:
                 output = 'archive'
 

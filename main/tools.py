@@ -109,12 +109,11 @@ def tarfiles_withoutpath(files_list, outname):
     tar = tarfile.open(filename, 'w')
     for name in files_list:
         filename = path_leaf(name)
-        tar.addfile(tarfile.TarInfo(filename), file(name))
+        tar.add(name, arcname=filename)
     tar.close()
     return tar.name
 
 
-#
 def secure_delete(path, passes=10):
     """Secure way to delete files.
 

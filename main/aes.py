@@ -163,7 +163,6 @@ def unpad(data):
     array = bytearray()
     array.extend(data)
     array = array[:-(array[-1])]
-
     return array
 
 
