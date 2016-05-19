@@ -22,6 +22,22 @@ import os
 import random
 import string
 import tarfile
+import ntpath
+
+
+def path_leaf(path):
+    """Extract file name from path.
+
+    This function extracts the file name in a file path.
+
+    :parameter:
+     path : string
+        The path of the file.
+
+    :return: A string, the file's name.
+    """
+    head, tail = ntpath.split(path)
+    return tail or ntpath.basename(head)
 
 
 def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
@@ -42,7 +58,7 @@ def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
 
 
 # Takes list of files as argument, put them in tar archive and return it.
-def tarfiles_named(files_list, outname):
+def tarfiles(files_list, outname):
     """Create a tar of input files.
 
     This function create a tar of `files_list` named `outname`.
@@ -65,6 +81,35 @@ def tarfiles_named(files_list, outname):
     tar = tarfile.open(filename, 'w')
     for name in files_list:
         tar.add(name)
+    tar.close()
+    return tar.name
+
+
+# Takes list of files as argument, put them in tar archive and return it.
+def tarfiles_withoutpath(files_list, outname):
+    """Create a tar of input files.
+
+    This function create a tar of `files_list` named `outname`.
+
+    :parameter:
+     files_list : list
+        The id length in number of chars.
+     outname : string
+        The chars to use to create random id.
+
+    :raise ArgumentError:
+            If there is no files in `files_list`.
+
+    :return: A string, the name of the tar file
+    """
+
+    if len(files_list) < 1:
+        raise argparse.ArgumentError("You must give one or more filenames.")
+    filename = outname
+    tar = tarfile.open(filename, 'w')
+    for name in files_list:
+        filename = path_leaf(name)
+        tar.addfile(tarfile.TarInfo(filename), file(name))
     tar.close()
     return tar.name
 

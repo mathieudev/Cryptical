@@ -164,7 +164,7 @@ def unpad(data):
     array.extend(data)
     array = array[:-(array[-1])]
 
-    return array.decode("utf-8")
+    return array
 
 
 __author__ = 'Hakan Kuesne and Mathieu Devaud'

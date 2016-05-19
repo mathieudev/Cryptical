@@ -214,7 +214,7 @@ def unlock_altered_archive():
     file.close()
 
     # Archive signed file and signature together again
-    main.tools.tarfiles_named(['encrypted_files_and_key.lkd.sign',
+    main.tools.tarfiles(['encrypted_files_and_key.lkd.sign',
                                'encrypted_files_and_key.lkd'], 'archive.lkd')
 
     call(["python", "../main/cryptical.py", "--unlock", "archive.lkd",

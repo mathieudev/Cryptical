@@ -19,6 +19,8 @@
 import tarfile
 import os.path
 import io
+import time
+
 import sys
 import tools
 import aes
@@ -47,6 +49,7 @@ def lock_files(files_to_lock, output, rsa_private_key, rsa_public_key):
         RSA public key
     """
     try:
+        starttime = time.time()
         #######################################################################
         # Keys generation and importation
         #######################################################################
@@ -70,7 +73,7 @@ def lock_files(files_to_lock, output, rsa_private_key, rsa_public_key):
         #######################################################################
 
         # Put file in a tar archive
-        archive = tools.tarfiles_named(files_to_lock, 'source.tar')
+        archive = tools.tarfiles_withoutpath(files_to_lock, 'source.tar')
         archive_data = open(archive, mode='rb')
         raw = archive_data.read()
         archive_data.close()
@@ -86,8 +89,7 @@ def lock_files(files_to_lock, output, rsa_private_key, rsa_public_key):
 
         # Tar cipherkeys, cipherfile and mac file toghether
         finalfiles = ['cipherkey.lkd', 'encrypted_files.lkd']
-        ciphertar = tools.tarfiles_named(finalfiles,
-                                         'encrypted_files_and_key.lkd')
+        ciphertar = tools.tarfiles(finalfiles, 'encrypted_files_and_key.lkd')
         f = open(ciphertar, mode='rb')
         ciphertardata = f.read()
         f.close()
@@ -101,8 +103,8 @@ def lock_files(files_to_lock, output, rsa_private_key, rsa_public_key):
         f.close()
 
         # Archive signed file and signature together
-        tools.tarfiles_named(['encrypted_files_and_key.lkd.sign',
-                              'encrypted_files_and_key.lkd'], output+'.lkd')
+        tools.tarfiles(['encrypted_files_and_key.lkd.sign',
+                        'encrypted_files_and_key.lkd'], output+'.lkd')
 
         # Secure delete temp files
         files_to_delete = ['encrypted_files_and_key.lkd.sign',
@@ -120,7 +122,10 @@ def lock_files(files_to_lock, output, rsa_private_key, rsa_public_key):
             if not success:
                 print('Something went wrong during the secure file delete '
                       'of ' + file + ', make sure your erase it manually.')
-        print("The files have been successfuly locked.")
+        endtime = time.time()
+        elapsedtime = endtime - starttime
+        print("The files have been successfuly "
+              "locked in %d seconds." % elapsedtime)
     except AttributeError:
         print('A method was called with a false attribute.')
         sys.exit()
@@ -145,6 +150,8 @@ def unlock_file(cipherfile, rsa_private_key, rsa_public_key):
         RSA public key
     """
     try:
+        starttime = time.time()
+
         # Importe RSA key from PEM
         rsa_private_key = RSA.importKey(open(rsa_private_key).read())
         rsa_public_key = RSA.importKey(open(rsa_public_key).read())
@@ -205,7 +212,10 @@ def unlock_file(cipherfile, rsa_private_key, rsa_public_key):
                                "encrypted_files.lkd", cipherfile]
             for eachfile in files_to_delete:
                 tools.secure_delete(eachfile, passes=1)
-            print("The file has been successfuly unlocked.")
+            endtime = time.time()
+            elapsedtime = endtime - starttime
+            print("The files have been successfuly "
+                  "unlocked in %d seconds." % elapsedtime)
     except AttributeError:
         print('A method was called with a false attribute.')
         sys.exit()

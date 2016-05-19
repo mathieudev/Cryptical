@@ -70,6 +70,7 @@ if __name__ == "__main__":
     # Unlock mechanism arg
     parser.add_argument("-o",
                         "--output",
+                        nargs = 1,
                         help='name of the final archive')
 
     # Print help if no args provided
@@ -95,7 +96,7 @@ if __name__ == "__main__":
         # Call locking mechanism if args --lock provided
         if args.lock is not None:
             files = []
-            output = args.output
+            output = str(args.output[0])
 
             for file in args.lock:
                 files.append(file.name)
@@ -109,7 +110,6 @@ if __name__ == "__main__":
             print("Unlocking archive %s" % args.unlock.name)
             locker.unlock_file(args.unlock.name, rsa_private_key,
                                rsa_public_key)
-            print("Done. Archive unlocked.")
     else:
         print("Provide RSA key pair or generate them")
 
