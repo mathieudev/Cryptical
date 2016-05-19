@@ -70,8 +70,14 @@ if __name__ == "__main__":
     # Unlock mechanism arg
     parser.add_argument("-o",
                         "--output",
-                        nargs = 1,
                         help='name of the final archive')
+
+    # Unlock mechanism arg
+    parser.add_argument("-d",
+                        "--delete",
+                        action="store_true",
+                        help='use to securely delete the files you want to '
+                             'lock')
 
     # Print help if no args provided
     if len(sys.argv) == 1:
@@ -87,7 +93,6 @@ if __name__ == "__main__":
 
     # Get RSA key pair if args --keys provided
     elif args.keys is not None:
-        print("Getting RSA key pair provided")
         rsa_private_key = args.keys[0].name
         print("RSA private key : %s" % rsa_private_key)
         rsa_public_key = args.keys[1].name
@@ -96,13 +101,25 @@ if __name__ == "__main__":
         # Call locking mechanism if args --lock provided
         if args.lock is not None:
             files = []
-            output = str(args.output[0])
 
             for file in args.lock:
                 files.append(file.name)
             print("Locking files %s" % files)
 
-            locker.lock_files(files, output, rsa_private_key, rsa_public_key)
+            # Secure delete sources files if user use --delete
+            if args.delete:
+                secure_delete = True
+            else:
+                secure_delete = False
+
+            # if no name for output, use archive
+            if args.output is not None:
+                output = str(args.output[0])
+            else:
+                output = 'archive'
+
+            locker.lock_files(files, rsa_private_key, rsa_public_key, output,
+                              secure_delete)
             print("Files locked in %s.lkd" % output)
 
         # Call unlocking mechanism if args --unlock provided

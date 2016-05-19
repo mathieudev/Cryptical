@@ -20,7 +20,6 @@ import tarfile
 import os.path
 import io
 import time
-
 import sys
 import tools
 import aes
@@ -32,7 +31,8 @@ AES_BLOCK_SIZE = 16
 AES_KEY_SIZE = 32
 
 
-def lock_files(files_to_lock, output, rsa_private_key, rsa_public_key):
+def lock_files(files_to_lock, rsa_private_key, rsa_public_key,
+               output='archive', secure_delete=False):
     """Lock files.
 
     This function lock `files_to_lock` in an archive `output` using RSA
@@ -41,15 +41,18 @@ def lock_files(files_to_lock, output, rsa_private_key, rsa_public_key):
     :parameter:
      files_to_lock : list
         A list of files to lock.
-     output : string
-        The output name of the archive.
      rsa_private_key : string
         RSA private key
      rsa_public_key : string
         RSA public key
+     output : string
+        The output name of the archive. "archive" by default.
+     secure_delete : boolean
+        True if the user want to securely delete his `files_to_lock`.
     """
     try:
         starttime = time.time()
+
         #######################################################################
         # Keys generation and importation
         #######################################################################
@@ -117,11 +120,12 @@ def lock_files(files_to_lock, output, rsa_private_key, rsa_public_key):
                 print('Something went wrong during the secure file delete '
                       'of ' + file + ', make sure your erase it manually.')
         # Secure delete sources files
-        for file in files_to_lock:
-            success = tools.secure_delete(file)
-            if not success:
-                print('Something went wrong during the secure file delete '
-                      'of ' + file + ', make sure your erase it manually.')
+        if secure_delete:
+            for file in files_to_lock:
+                success = tools.secure_delete(file)
+                if not success:
+                    print('Something went wrong during the secure file delete '
+                          'of ' + file + ', make sure your erase it manually.')
         endtime = time.time()
         elapsedtime = endtime - starttime
         print("The files have been successfuly "
