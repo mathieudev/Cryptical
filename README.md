@@ -33,6 +33,12 @@ Lock your files in a secure container :
 python cryptical.py --lock file1.txt file2.txt --keys priv.pem pub.pem --output archive
 ```
 
+Lock your files in a secure container and securely delete them :
+
+```
+python cryptical.py --lock file1.txt file2.txt --keys priv.pem pub.pem --output archive --delete
+```
+
 Unlock your secure container :
 
 ```
