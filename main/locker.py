@@ -133,6 +133,9 @@ def lock_files(files_to_lock, rsa_private_key, rsa_public_key,
     except AttributeError:
         print('A method was called with a false attribute.')
         sys.exit()
+    except IOError:
+        print('Maybe one of your files does not exist')
+        sys.exit()
     except:
         print('An unexpected error occurred when locking files.')
         sys.exit()
