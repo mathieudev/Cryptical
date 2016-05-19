@@ -1,7 +1,7 @@
 # Cryptical
 
-![Python 2.7](https://img.shields.io/badge/python-2.7-blue.svg)(https://www.python.org/)
-![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)(https://raw.githubusercontent.com/mathieudev/Cryptical/master/LICENSE)
+[![Python 2.7](https://img.shields.io/badge/python-2.7-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://raw.githubusercontent.com/mathieudev/Cryptical/master/LICENSE)
 
 This python program provides a secure container for your files using AES 256 with PKCS#7 padding for the files encryption, RSA-OAEP for the AES key encryption and RSA-PSS for the signature of the archive. It is also an API you can use for encryption, decryption and signature operations.
 
