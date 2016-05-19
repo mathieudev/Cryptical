@@ -117,27 +117,32 @@ def lock_files(files_to_lock, rsa_private_key, rsa_public_key,
         for file in files_to_delete:
             success = tools.secure_delete(file)
             if not success:
-                print('Something went wrong during the secure file delete '
+                print('[error] Something went wrong during the secure file '
+                      'delete '
                       'of ' + file + ', make sure your erase it manually.')
         # Secure delete sources files
         if secure_delete:
             for file in files_to_lock:
                 success = tools.secure_delete(file)
                 if not success:
-                    print('Something went wrong during the secure file delete '
-                          'of ' + file + ', make sure your erase it manually.')
+                    print('[error] Something went wrong during the secure'
+                          ' file delete of ' + file +
+                          ', make sure your erase it manually.')
+
         endtime = time.time()
         elapsedtime = endtime - starttime
-        print("The files have been successfuly "
-              "locked in %d seconds." % elapsedtime)
+
+        print("[info] The files have been successfuly "
+              "locked in %f seconds." % elapsedtime)
+
     except AttributeError:
-        print('A method was called with a false attribute.')
+        print('[error] A method was called with a false attribute.')
         sys.exit()
     except IOError:
-        print('Maybe one of your files does not exist')
+        print('[error] Maybe one of your files does not exist')
         sys.exit()
     except:
-        print('An unexpected error occurred when locking files.')
+        print('[error] An unexpected error occurred when locking files.')
         sys.exit()
 
 
@@ -178,15 +183,16 @@ def unlock_file(cipherfile, rsa_private_key, rsa_public_key):
         raw_files = archive_data.read()
         archive_data.close()
         if not rsa.rsa_verify_sign(rsa_public_key, raw_signature, raw_files):
-            print("This file has been corrupted ! Don't use it !")
+            print("[warning] This file has been corrupted ! Don't use it !")
             # clean tar filed
             files_to_delete = ["encrypted_files_and_key.lkd.sign",
                                "encrypted_files_and_key.lkd"]
+
             for eachfile in files_to_delete:
                 if os.path.isfile(eachfile):
                     tools.secure_delete(eachfile, passes=1)
         else:
-            print("This file is authentic !")
+            print("[info] This file is authentic !")
 
             # Extract encrypted files and symetric key
             tar = tarfile.open('encrypted_files_and_key.lkd')
@@ -209,32 +215,40 @@ def unlock_file(cipherfile, rsa_private_key, rsa_public_key):
 
             bytestar = io.BytesIO(
                 str(aes.aes_decrypt(AES_BLOCK_SIZE, aes_key, raw_files)))
+
             # Untar files
             tar = tarfile.open(fileobj=bytestar)
             for eachfile in tar.getnames():
                 tar.extract(eachfile)
+
             # Delete container related files
             files_to_delete = ["cipherkey.lkd", "encrypted_files_and_key.lkd",
                                "encrypted_files_and_key.lkd.sign",
                                "encrypted_files.lkd", cipherfile]
+
             for eachfile in files_to_delete:
                 tools.secure_delete(eachfile, passes=1)
+
             endtime = time.time()
             elapsedtime = endtime - starttime
-            print("The files have been successfuly "
-                  "unlocked in %d seconds." % elapsedtime)
+
+            print("[info] The files have been successfuly "
+                  "unlocked in %f seconds." % elapsedtime)
+
     except AttributeError:
-        print('A method was called with a false attribute.')
+        print('[error] A method was called with a false attribute.')
         sys.exit()
     except:
-        print('An unexpected error occurred when unlocking files.')
+        print('[error] An unexpected error occurred when unlocking files.')
 
         files_to_delete = ["cipherkey.lkd", "encrypted_files_and_key.lkd",
                            "encrypted_files_and_key.lkd.sign",
                            "encrypted_files.lkd"]
+
         for eachfile in files_to_delete:
             if os.path.isfile(eachfile):
                 tools.secure_delete(eachfile, passes=1)
+
         sys.exit()
 
 

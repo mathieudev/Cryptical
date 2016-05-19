@@ -23,6 +23,21 @@ import sys
 import rsa
 import locker
 
+def print_header():
+    print("""
+       _____                  _   _           _
+      / ____|                | | (_)         | |
+     | |     _ __ _   _ _ __ | |_ _  ___ __ _| |
+     | |    | '__| | | | '_ \| __| |/ __/ _` | |
+     | |____| |  | |_| | |_) | |_| | (_| (_| | |
+      \_____|_|   \__, | .__/ \__|_|\___\__,_|_|
+                   __/ | |
+                  |___/|_|
+                  """)
+
+    print("Authors : Hakan Küsne & Mathieu Devaud")
+    print("Version 1.0\n")
+
 
 if __name__ == "__main__":
 
@@ -80,6 +95,9 @@ if __name__ == "__main__":
                              'lock')
 
     try:
+
+        print_header()
+
         # Print help if no args provided
         if len(sys.argv) == 1:
             parser.print_help()
@@ -95,9 +113,9 @@ if __name__ == "__main__":
         # Get RSA key pair if args --keys provided
         elif args.keys is not None:
             rsa_private_key = args.keys[0].name
-            print("RSA private key : %s" % rsa_private_key)
+            print("[info] RSA private key : %s" % rsa_private_key)
             rsa_public_key = args.keys[1].name
-            print("RSA public key : %s" % rsa_public_key)
+            print("[info] RSA public key : %s\n" % rsa_public_key)
 
             # Call locking mechanism if args --lock provided
             if args.lock is not None:
@@ -105,8 +123,9 @@ if __name__ == "__main__":
 
                 for file in args.lock:
                     files.append(file.name)
+                    print("[info] Adding file : %s" % file.name)
 
-                print("Locking files %s" % files)
+                print("[info] All following files will be locked %s\n" % files)
 
                 # Secure delete sources files if user use --delete
                 if args.delete:
@@ -122,19 +141,19 @@ if __name__ == "__main__":
 
                 locker.lock_files(files, rsa_private_key, rsa_public_key,
                                   output, secure_delete)
-                print("Files locked in %s.lkd" % output)
+                print("[info] Files locked in %s.lkd" % output)
 
             # Call unlocking mechanism if args --unlock provided
             elif args.unlock is not None:
-                print("Unlocking archive %s" % args.unlock.name)
+                print("[info] Unlocking archive %s" % args.unlock.name)
                 locker.unlock_file(args.unlock.name, rsa_private_key,
                                    rsa_public_key)
         else:
-            print("Provide RSA key pair or generate them.")
+            print("[error] Provide RSA key pair or generate them.")
     except IOError as e:
-        print("I/O error({0}): {1}".format(e.errno, e.strerror))
+        print("[error] I/O error({0}): {1}".format(e.errno, e.strerror))
     except:
-        print("An unexpected error occured.")
+        pass
 
 
 __author__ = 'Hakan Kuesne and Mathieu Devaud'
