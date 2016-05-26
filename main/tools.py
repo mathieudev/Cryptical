@@ -86,7 +86,7 @@ def tarfiles(files_list, outname):
     return tar.name
 
 
-def secure_delete(path, passes=10):
+def secure_delete(path, passes=1):
     """Secure way to delete files.
 
     This function remove sensitive data in a secure way by overwriting data
